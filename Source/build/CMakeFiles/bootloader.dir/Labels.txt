@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+C:/Users/vmb_b/OneDrive/Documents2/Projet_Espressif/ESP32_C3_SoftSwitch/Source/build/CMakeFiles/bootloader
+C:/Users/vmb_b/OneDrive/Documents2/Projet_Espressif/ESP32_C3_SoftSwitch/Source/build/CMakeFiles/bootloader.rule
+C:/Users/vmb_b/OneDrive/Documents2/Projet_Espressif/ESP32_C3_SoftSwitch/Source/build/CMakeFiles/bootloader-complete.rule
+C:/Users/vmb_b/OneDrive/Documents2/Projet_Espressif/ESP32_C3_SoftSwitch/Source/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+C:/Users/vmb_b/OneDrive/Documents2/Projet_Espressif/ESP32_C3_SoftSwitch/Source/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+C:/Users/vmb_b/OneDrive/Documents2/Projet_Espressif/ESP32_C3_SoftSwitch/Source/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+C:/Users/vmb_b/OneDrive/Documents2/Projet_Espressif/ESP32_C3_SoftSwitch/Source/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+C:/Users/vmb_b/OneDrive/Documents2/Projet_Espressif/ESP32_C3_SoftSwitch/Source/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+C:/Users/vmb_b/OneDrive/Documents2/Projet_Espressif/ESP32_C3_SoftSwitch/Source/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+C:/Users/vmb_b/OneDrive/Documents2/Projet_Espressif/ESP32_C3_SoftSwitch/Source/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
