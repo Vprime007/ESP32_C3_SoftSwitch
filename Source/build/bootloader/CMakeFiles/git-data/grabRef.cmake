@@ -18,7 +18,7 @@ set(HEAD_HASH)
 file(READ "C:/Users/vmb_b/OneDrive/Documents2/Projet_Espressif/ESP32_C3_SoftSwitch/Source/build/bootloader/CMakeFiles/git-data/HEAD" HEAD_CONTENTS LIMIT 1024)
 
 string(STRIP "${HEAD_CONTENTS}" HEAD_CONTENTS)
-set(GIT_DIR "C:/Users/vmb_b/OneDrive/Documents2/Projet_Espressif/ESP32_C3_SoftSwitch/Source/SDK/.git")
+set(GIT_DIR "C:/Users/vmb_b/esp/v5.3/esp-idf/.git")
 # handle git-worktree
 if(EXISTS "${GIT_DIR}/commondir")
 	file(READ "${GIT_DIR}/commondir" GIT_DIR_NEW LIMIT 1024)
