@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/vmb_b/esp/v5.3/esp-idf/components/json
+# Install script for directory: C:/Users/vmb_b/OneDrive/Documents2/Projet_Espressif/ESP32_C3_SoftSwitch/Source/SDK/components/json
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

@@ -7,10 +7,13 @@
         "IDF_CCACHE_ENABLE": "1",
         "ESP_ROM_ELF_DIR": "C:\\Users\\vmb_b\\.espressif\\tools\\esp-rom-elfs\\20240305/"
     },
-    "idf.espIdfPathWin": "C:\\Users\\vmb_b\\esp\\v5.3\\esp-idf",
+    "idf.espIdfPathWin": "C:\\Users\\vmb_b\\OneDrive\\Documents2\\Projet_Espressif\\ESP32_C3_SoftSwitch\\Source\\SDK",
     "idf.openOcdConfigs": [
         "board/esp32-wrover-kit-3.3v.cfg"
     ],
     "idf.pythonBinPathWin": "C:\\Users\\vmb_b\\.espressif\\python_env\\idf5.3_py3.11_env\\Scripts\\python.exe",
-    "idf.toolsPathWin": "C:\\Users\\vmb_b\\.espressif"
+    "idf.toolsPathWin": "C:\\Users\\vmb_b\\.espressif",
+    "files.associations": {
+        "stdio.h": "c"
+    }
 }

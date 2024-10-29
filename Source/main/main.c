@@ -3,19 +3,70 @@
  *
  * SPDX-License-Identifier: CC0-1.0
  */
-
+/******************************************************************************
+*   Includes
+*******************************************************************************/
 #include <stdio.h>
 #include <inttypes.h>
 #include "sdkconfig.h"
+
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+
 #include "esp_chip_info.h"
 #include "esp_flash.h"
 #include "esp_system.h"
+#include "esp_log.h"
 
-void app_main(void)
-{
-    printf("Hello world!\n");
+#include "hardwareInterface.h"
+
+/******************************************************************************
+*   Private Definitions
+*******************************************************************************/
+#define LOG_LOCAL_LEVEL             (ESP_LOG_INFO)
+
+/******************************************************************************
+*   Private Macros
+*******************************************************************************/
+
+
+/******************************************************************************
+*   Private Data Types
+*******************************************************************************/
+
+
+/******************************************************************************
+*   Private Functions Declaration
+*******************************************************************************/
+static void tMainTask(void *pvParameters);
+
+/******************************************************************************
+*   Public Variables
+*******************************************************************************/
+
+
+/******************************************************************************
+*   Private Variables
+*******************************************************************************/
+static TaskHandle_t main_task_handle = NULL;
+
+static const char * TAG = "MAIN";
+
+/******************************************************************************
+*   Private Functions Definitions
+*******************************************************************************/
+static void tMainTask(void *pvParameters){
+
+    ESP_LOGI(TAG, "Starting Main Task");
+
+    for(;;){
+
+        vTaskDelay(1000/portTICK_PERIOD_MS);
+    }
+    vTaskDelete(NULL);
+}
+
+void app_main(void){
 
     /* Print chip information */
     esp_chip_info_t chip_info;
@@ -42,11 +93,26 @@ void app_main(void)
 
     printf("Minimum free heap size: %" PRIu32 " bytes\n", esp_get_minimum_free_heap_size());
 
-    for (int i = 10; i >= 0; i--) {
-        printf("Restarting in %d seconds...\n", i);
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    if(pdTRUE != xTaskCreate(tMainTask,
+                             "Main task",
+                             2048,
+                             NULL,
+                             4,
+                             &main_task_handle)){
+
+        ESP_LOGE(TAG, "Failed to create Main taks");
+        while(1);//Stall here until the end of time...
     }
-    printf("Restarting now.\n");
-    fflush(stdout);
-    esp_restart();
 }
+
+/******************************************************************************
+*   Public Functions Definitions
+*******************************************************************************/
+
+
+/******************************************************************************
+*   Interrupts
+*******************************************************************************/
+
+
+

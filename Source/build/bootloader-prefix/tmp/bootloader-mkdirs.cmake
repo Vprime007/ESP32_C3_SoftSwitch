@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 3.5)
 
 file(MAKE_DIRECTORY
-  "C:/Users/vmb_b/esp/v5.3/esp-idf/components/bootloader/subproject"
+  "C:/Users/vmb_b/OneDrive/Documents2/Projet_Espressif/ESP32_C3_SoftSwitch/Source/SDK/components/bootloader/subproject"
   "C:/Users/vmb_b/OneDrive/Documents2/Projet_Espressif/ESP32_C3_SoftSwitch/Source/build/bootloader"
   "C:/Users/vmb_b/OneDrive/Documents2/Projet_Espressif/ESP32_C3_SoftSwitch/Source/build/bootloader-prefix"
   "C:/Users/vmb_b/OneDrive/Documents2/Projet_Espressif/ESP32_C3_SoftSwitch/Source/build/bootloader-prefix/tmp"
