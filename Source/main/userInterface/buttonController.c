@@ -21,6 +21,8 @@
 *   Private Definitions
 *******************************************************************************/
 #define BUTTON_MONITORING_PERIOD_MS     (10)
+#define NB_SAMPLE_FOR_PRESSED           (5)
+#define NB_SAMPLE_FOR_RELEASED          (5)
 
 #define LOG_LOCAL_LEVEL                 (ESP_LOG_INFO)
 
@@ -32,19 +34,25 @@
 /******************************************************************************
 *   Private Data Types
 *******************************************************************************/
-typedef struct button_s{
+typedef enum Button_State_e{
+    BUTTON_STATE_RELEASED,
+    BUTTON_STATE_PRESSED,
+}Button_State_t;
+
+typedef struct Button_s{
     uint8_t io;
+    Button_State_t prev_state;
     BTN_Active_Level_t active_level;
-    uint8_t debounce_cptr;
+    uint16_t debounce_cptr;
     btnPressedCallback pressed_callback;
     btnReleasedCallback released_callback;
-}button_t;
+}Button_t;
 
 /******************************************************************************
 *   Private Functions Declaration
 *******************************************************************************/
 static bool isTableFull(void);
-static void addButtonToTable(button_t *pButton_config);
+static void addButtonToTable(Button_t *pButton_config);
 
 static void tButtonTask(void *pvParameters);
 
@@ -56,7 +64,7 @@ static void tButtonTask(void *pvParameters);
 /******************************************************************************
 *   Private Variables
 *******************************************************************************/
-static button_t button_table[BTN_MAX_NUMBER_OF_BUTTON];
+static Button_t button_table[BTN_MAX_NUMBER_OF_BUTTON];
 
 static TaskHandle_t button_task_handle = NULL;
 static SemaphoreHandle_t button_mutex_handle = NULL;
@@ -72,7 +80,45 @@ static void tButtonTask(void *pvPatameters){
 
     for(;;){
 
+        for(uint8_t i=0; i<BTN_MAX_NUMBER_OF_BUTTON; i++){
+            
+            if(button_table[i].io != 0xFF){
 
+                Button_State_t state = BUTTON_STATE_RELEASED;
+
+                if((gpio_get_level(button_table[i].io) && (button_table[i].active_level == BTN_ACTIVE_LEVEL_HIGH))||
+                   (!gpio_get_level(button_table[i].io) && (button_table[i].active_level == BTN_ACTIVE_LEVEL_LOW))){
+                    //button currently pressed
+                    state = BUTTON_STATE_PRESSED;
+                }
+
+                if(state != button_table[i].prev_state){
+                    button_table[i].prev_state = state;
+                    button_table[i].debounce_cptr = 0;
+                }
+                else{
+
+                    if(state == BUTTON_STATE_PRESSED){
+                        if((button_table[i].debounce_cptr >= NB_SAMPLE_FOR_PRESSED) && 
+                           (button_table[i].debounce_cptr != 0xFFFF)){
+
+                            button_table[i].debounce_cptr = 0xFFFF;
+                            if(button_table[i].pressed_callback != NULL)    button_table[i].pressed_callback();
+                        }
+                    }
+                    else{
+                        if((button_table[i].debounce_cptr >= NB_SAMPLE_FOR_RELEASED) && 
+                           (button_table[i].debounce_cptr != 0xFFFF)){
+
+                            button_table[i].debounce_cptr = 0xFFFF;
+                            if(button_table[i].released_callback != NULL)   button_table[i].released_callback();
+                        }
+                    }
+
+                    if(button_table[i].debounce_cptr != 0xFFFFF)    button_table[i].debounce_cptr++;
+                }
+            }
+        }
 
         vTaskDelay(BUTTON_MONITORING_PERIOD_MS/portTICK_PERIOD_MS);
     }
@@ -94,7 +140,7 @@ static bool isTableFull(void){
     return available_space;
 }
 
-static void addButtonToTable(button_t *pButton_config){
+static void addButtonToTable(Button_t *pButton_config){
 
     //Scan the button table for the first available index
     uint8_t index = 0;
@@ -103,6 +149,7 @@ static void addButtonToTable(button_t *pButton_config){
         if(button_table[index].io == 0xFF){
             //Register button in available index
             button_table[index].io = pButton_config->io;
+            button_table[index].prev_state = BUTTON_STATE_RELEASED;
             button_table[index].active_level = pButton_config->active_level;
             button_table[index].pressed_callback = pButton_config->pressed_callback;
             button_table[index].released_callback = pButton_config->released_callback;
@@ -124,6 +171,7 @@ BTN_Ctrl_Ret_t BTN_InitController(void){
         button_table[i].active_level = BTN_ACTIVE_LEVEL_INVALID;
         button_table[i].debounce_cptr = 0;
         button_table[i].io = 0xFF;
+        button_table[i].prev_state = BUTTON_STATE_RELEASED;
         button_table[i].pressed_callback = NULL;
         button_table[i].released_callback = NULL;
     }
@@ -163,7 +211,7 @@ BTN_Ctrl_Ret_t BTN_AddButton(uint8_t io_num,
 
     if(!isTableFull()){
         //Store new button in table
-        button_t btn_config = {
+        Button_t btn_config = {
             .io = io_num,
             .active_level = active_level,
             .pressed_callback = pressed_callback,
